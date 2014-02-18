@@ -50,6 +50,7 @@ import com.notnoop.exceptions.InvalidSSLConfig;
 import com.notnoop.exceptions.RuntimeIOException;
 
 import static com.notnoop.apns.internal.Utilities.*;
+import java.security.Security;
 
 /**
  * The class is used to create instances of {@link ApnsService}.
@@ -70,7 +71,7 @@ import static com.notnoop.apns.internal.Utilities.*;
  */
 public class ApnsServiceBuilder {
     private static final String KEYSTORE_TYPE = "PKCS12";
-    private static final String KEY_ALGORITHM = "sunx509";
+    private static final String KEY_ALGORITHM = ((Security.getProperty("ssl.KeyManagerFactory.algorithm") == null)? "sunx509" : Security.getProperty("ssl.KeyManagerFactory.algorithm"));
 
     private SSLContext sslContext;
 
