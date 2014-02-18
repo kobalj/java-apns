@@ -36,17 +36,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.notnoop.apns.ApnsNotification;
 import com.notnoop.apns.ApnsService;
 import com.notnoop.exceptions.NetworkIOException;
+import java.util.logging.Level;
 
 public class QueuedApnsService extends AbstractApnsService {
 
-	private static final Logger logger = LoggerFactory.getLogger(QueuedApnsService.class);
-	
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger("APNS");
+
     private ApnsService service;
     private BlockingQueue<ApnsNotification> queue;
     private AtomicBoolean started = new AtomicBoolean(false);
@@ -86,12 +84,12 @@ public class QueuedApnsService extends AbstractApnsService {
                         ApnsNotification msg = queue.take();
                         service.push(msg);
                     } catch (InterruptedException e) {
-                    	// ignore
+                        // ignore
                     } catch (NetworkIOException e) {
-                    	// ignore: failed connect...
+                        // ignore: failed connect...
                     } catch (Exception e) {
-                    	// weird if we reached here - something wrong is happening, but we shouldn't stop the service anyway!
-                    	logger.warn("Unexpected message caught... Shouldn't be here", e);
+                        // weird if we reached here - something wrong is happening, but we shouldn't stop the service anyway!
+                        logger.log(Level.WARNING, "Unexpected message caught... Shouldn't be here", e);
                     }
                 }
             }

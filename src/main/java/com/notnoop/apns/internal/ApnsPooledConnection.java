@@ -5,14 +5,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-
 import com.notnoop.apns.ApnsNotification;
 import com.notnoop.exceptions.NetworkIOException;
+import java.util.logging.Level;
 
 public class ApnsPooledConnection implements ApnsConnection {
-    private static final Logger logger = LoggerFactory.getLogger(ApnsPooledConnection.class);
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger("APNS");
 
     private final ApnsConnection prototype;
     private final int max;
@@ -60,7 +58,7 @@ public class ApnsPooledConnection implements ApnsConnection {
         try {
             executors.awaitTermination(10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            logger.warn("pool termination interrupted", e);
+            logger.log(Level.WARNING, "pool termination interrupted", e);
         }
         for (ApnsConnection conn : prototypes) {
             Utilities.close(conn);

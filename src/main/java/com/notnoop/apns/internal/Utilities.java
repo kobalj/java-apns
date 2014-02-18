@@ -48,13 +48,12 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.notnoop.exceptions.InvalidSSLConfig;
 import com.notnoop.exceptions.NetworkIOException;
+import java.util.logging.Level;
 
 public final class Utilities {
-    private static Logger logger = LoggerFactory.getLogger(Utilities.class);
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger("APNS");
 
     public static final String SANDBOX_GATEWAY_HOST = "gateway.sandbox.push.apple.com";
     public static final int SANDBOX_GATEWAY_PORT = 2195;
@@ -235,7 +234,7 @@ public final class Utilities {
                 closeable.close();
             }
         } catch (final IOException e) {
-            logger.debug("error while closing resource", e);
+            logger.log(Level.FINEST, "error while closing resource", e);
         }
     }
 
@@ -245,7 +244,7 @@ public final class Utilities {
                 closeable.close();
             }
         } catch (final IOException e) {
-            logger.debug("error while closing socket", e);
+            logger.log(Level.FINEST, "error while closing socket", e);
         }
     }
 

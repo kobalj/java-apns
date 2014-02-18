@@ -39,12 +39,12 @@ import java.util.Date;
 import java.util.Map;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.notnoop.exceptions.NetworkIOException;
+import java.util.logging.Level;
 
 public class ApnsFeedbackConnection {
-    private static final Logger logger = LoggerFactory.getLogger(ApnsFeedbackConnection.class);
+
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger("APNS");
 
     private final SocketFactory factory;
     private final String host;
@@ -76,9 +76,8 @@ public class ApnsFeedbackConnection {
                 attempts = 0;
                 return result;
             } catch (final Exception e) {
-                logger.warn("Failed to retreive invalid devices", e);
+                logger.log(Level.WARNING, "Failed to retreive invalid devices", e);
                 if (attempts >= RETRIES) {
-                    logger.error("Couldn't get feedback connection", e);
                     Utilities.wrapAndThrowAsRuntimeException(e);
                 }
                 Utilities.sleep(DELAY_IN_MS);
@@ -100,7 +99,7 @@ public class ApnsFeedbackConnection {
                 proxySocket.connect(new InetSocketAddress(host, port));
                 socket = ((SSLSocketFactory) factory).createSocket(proxySocket, host, port, false);
             }
-            
+
             final InputStream stream = socket.getInputStream();
             return Utilities.parseFeedbackStream(stream);
         } finally {
